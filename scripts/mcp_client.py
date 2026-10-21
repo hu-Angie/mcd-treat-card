@@ -43,15 +43,29 @@ class McpRateLimitError(McpError):
     """429：触发限流。"""
 
 
-def _load_env_file() -> None:
-    """从项目根的 .env 载入配置。
+# 隐私文件的默认存放处：项目**外面**的兄弟目录。
+# 放在项目外而不是只靠 .gitignore，是因为网页上传和 `git add -A` 都可能绕过忽略规则，
+# 移出去才能让"全选上传"永远安全。
+_PRIVATE_DIR = "_本地隐私文件"
 
-    优先级：已存在的环境变量 > .env 文件。
-    .env 被 .gitignore 排除，且**不应被任何工具读取后展示**——
-    它存在的意义就是让 Token 不出现在命令行、日志和对话里。
+
+def _env_candidates() -> list[Path]:
+    here = Path(__file__).resolve().parent.parent
+    return [
+        here / ".env",
+        here.parent / _PRIVATE_DIR / ".env",
+        Path.cwd() / ".env",
+    ]
+
+
+def _load_env_file() -> None:
+    """载入 .env 配置。
+
+    优先级：已存在的环境变量 > 各处 .env 文件。
+    Token 存在的意义就是不出现在命令行、日志和对话里，
+    **任何情况下都不要把 .env 的内容读出来展示**。
     """
-    for base in (Path(__file__).resolve().parent.parent, Path.cwd()):
-        env_file = base / ".env"
+    for env_file in _env_candidates():
         if not env_file.is_file():
             continue
         try:
@@ -59,7 +73,7 @@ def _load_env_file() -> None:
             # 否则首个键名会变成 "\ufeffMCD_MCP_TOKEN" 而读不到
             lines = env_file.read_text(encoding="utf-8-sig").splitlines()
         except OSError:
-            return
+            continue
         for line in lines:
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:

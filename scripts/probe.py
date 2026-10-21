@@ -29,19 +29,26 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from mcp_client import McpClient, McpError  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
+# 脱敏样本，可公开进仓库
 FIXTURES = ROOT / "fixtures"
+# 真实响应（含地址/券/积分），放在项目**外面**，
+# 这样 `git add -A` 和网页全选上传都不可能碰到它
+PRIVATE = ROOT.parent / "_本地隐私文件"
 
 
 def _ensure_fixtures() -> None:
     FIXTURES.mkdir(exist_ok=True)
+    PRIVATE.mkdir(parents=True, exist_ok=True)
 
 
-def _save(name: str, data) -> None:
-    path = FIXTURES / f"{name}.json"
+def _save(name: str, data, private: bool = False) -> None:
+    """private=True 表示内容含真实个人信息，写到项目外。"""
+    base = PRIVATE if private else FIXTURES
+    path = base / f"{name}.json"
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    size = path.stat().st_size
-    print(f"  [saved] fixtures/{name}.json  ({size} bytes)")
+    where = "_本地隐私文件" if private else "fixtures"
+    print(f"  [saved] {where}/{name}.json  ({path.stat().st_size} bytes)")
 
 
 def cmd_schema(client: McpClient) -> None:
@@ -103,7 +110,7 @@ def cmd_call(client: McpClient, name: str, args_json: str | None) -> None:
     result = client.call_tool(name, args)
 
     _ensure_fixtures()
-    _save(f"raw_{name}", {"tool": name, "arguments": args, "result": result})
+    _save(f"raw_{name}", {"tool": name, "arguments": args, "result": result}, private=True)
 
     print("\n--- 返回内容 ---")
     if isinstance(result, str):
@@ -126,7 +133,7 @@ def cmd_readonly(client: McpClient) -> None:
         except McpError as e:
             print(f"  ! 失败: {e}")
             return None
-        _save(f"raw_{tool}", {"tool": tool, "arguments": args, "result": r})
+        _save(f"raw_{tool}", {"tool": tool, "arguments": args, "result": r}, private=True)
         # 只打印结构不打印值——地址/订单等个人隐私不进终端输出与日志
         print(f"  OK: {_shape(r)}")
         return r
