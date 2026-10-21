@@ -1,0 +1,14 @@
+# MCP Token 绝不能进仓库
+.env
+*.token
+mcp-config.json
+
+# 接口侦察产物可能含真实地址/订单/手机号，一律不入库
+fixtures/raw_*.json
+
+# 生成的卡片（样例图会单独挑脱敏后的放进 docs/）
+output/
+
+__pycache__/
+*.pyc
+.venv/

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .card {
+    width: 1080px;
+    height: 1440px;
+    background: #FFC72C;
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+    color: #2C2C2A;
+    position: relative;
+    padding: 110px 90px 190px 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .badge {
+    position: absolute;
+    top: 52px;
+    right: 62px;
+    font-size: 26px;
+    color: #DA291C;
+    border: 3px solid #DA291C;
+    border-radius: 8px;
+    padding: 6px 18px;
+    letter-spacing: 2px;
+  }
+
+  .tag {
+    font-size: 30px;
+    letter-spacing: 14px;
+    color: #5A4A22;
+    margin-bottom: 74px;
+  }
+
+  .name {
+    font-size: 96px;
+    font-weight: 500;
+    letter-spacing: 8px;
+    line-height: 1.2;
+  }
+
+  .sub {
+    font-size: 38px;
+    color: #5A4A22;
+    margin-top: 20px;
+    letter-spacing: 2px;
+  }
+
+  .rule {
+    width: 210px;
+    height: 3px;
+    background: #DA291C;
+    margin: 62px 0;
+  }
+
+  .msg {
+    font-family: KaiTi, 楷体, STKaiti, "Kaiti SC", "Microsoft YaHei", sans-serif;
+    font-size: 52px;
+    line-height: 1.7;
+    text-align: center;
+    letter-spacing: 2px;
+    max-width: 820px;
+  }
+
+  .rule2 {
+    width: 210px;
+    height: 3px;
+    background: #DA291C;
+    margin: 62px 0 54px 0;
+  }
+
+  .items {
+    width: 760px;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 36px;
+    line-height: 1.9;
+    color: #3A3118;
+  }
+
+  .meta {
+    margin-top: auto;
+    text-align: center;
+    font-size: 28px;
+    color: #6B5B2E;
+    letter-spacing: 1px;
+  }
+
+  .meta .tail { margin-top: 12px; }
+
+  .brand {
+    position: absolute;
+    right: 70px;
+    bottom: 96px;
+    font-size: 26px;
+    color: rgba(0, 0, 0, 0.42);
+    letter-spacing: 1px;
+  }
+
+  .disclaimer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 46px;
+    text-align: center;
+    font-size: 22px;
+    color: rgba(0, 0, 0, 0.36);
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    $badge_html
+    <div class="tag">麦 麦 请 客 卡</div>
+    <div class="name">$recipient</div>
+    <div class="sub">$subtitle</div>
+    <div class="rule"></div>
+    <div class="msg">$message</div>
+    <div class="rule2"></div>
+    <div class="items">$items_html</div>
+    <div class="meta">
+      <div>$timestamp</div>
+      $eta_html
+    </div>
+    <div class="brand">$brand</div>
+    <div class="disclaimer">本卡片为独立参赛作品，非麦当劳官方产品</div>
+  </div>
+</body>
+</html>
