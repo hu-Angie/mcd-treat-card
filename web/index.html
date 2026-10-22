@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>麦麦请客卡 · McTreat</title>
+<style>
+  :root {
+    --mcd-gold: #FFC72C;
+    --mcd-red: #DA291C;
+    --ink: #2C2C2A;
+    --ink-2: #5F5E5A;
+    --line: rgba(0,0,0,.12);
+    --bg: #F7F6F2;
+    --card: #FFFFFF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: .25rem; }
+  .sub { color: var(--ink-2); font-size: 13px; margin-bottom: 1.5rem; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+  }
+  label { display: block; font-size: 13px; color: var(--ink-2); margin-bottom: .35rem; }
+  input, textarea {
+    width: 100%; padding: .6rem .75rem; font-size: 14px;
+    border: 1px solid var(--line); border-radius: 8px;
+    font-family: inherit; background: #fff;
+  }
+  textarea { resize: vertical; min-height: 68px; }
+  .row { margin-bottom: 1rem; }
+  button {
+    padding: .7rem 1.5rem; font-size: 14px; font-weight: 500;
+    border: 1px solid var(--mcd-red); border-radius: 8px;
+    background: var(--mcd-red); color: #fff; cursor: pointer;
+    font-family: inherit;
+  }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .row-inline { display: flex; gap: .5rem; align-items: center; }
+  .hint { font-size: 12px; color: var(--ink-2); margin-top: .35rem; }
+  pre {
+    background: #F1EFE8; padding: .85rem; border-radius: 8px;
+    font-size: 12px; overflow-x: auto; white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .warn {
+    border-left: 3px solid var(--mcd-red); padding-left: .75rem;
+    font-size: 13px; color: var(--ink-2); margin-top: 1rem;
+  }
+  .combo {
+    border: 1px solid var(--line); border-radius: 8px;
+    padding: .85rem 1rem; margin-bottom: .75rem;
+  }
+  .combo-h { font-weight: 500; font-size: 14px; margin-bottom: .3rem; }
+  .combo-b { font-size: 13px; color: var(--ink-2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>麦麦请客卡 · McTreat</h1>
+  <p class="sub">填好下面几项，点确认，剩下的交给 Agent。付款由你扫。</p>
+
+  <div class="card">
+    <div class="row">
+      <label for="recipient">送给谁</label>
+      <input id="recipient" value="AA" placeholder="通讯录里的名字">
+    </div>
+    <div class="row">
+      <label for="budget">预算（元）</label>
+      <input id="budget" value="20" type="number" min="1" step="1">
+    </div>
+    <div class="row">
+      <label for="message">留言</label>
+      <textarea id="message">对自己好一点</textarea>
+    </div>
+    <div class="row">
+      <label for="scene">场景</label>
+      <select id="scene">
+        <option value="care">关心 · 吃饱才有力气</option>
+        <option value="overtime">加班 · 提神扛饿</option>
+        <option value="longdistance">异地 · 送到手还是热的</option>
+        <option value="apology">道歉 · 甜一点好说话</option>
+      </select>
+    </div>
+      <button id="go" type="button">确认，帮我点这一单</button>
+    <div class="hint">点击后会真实创建订单。付款链接会给你，钱由你自己扫。</div>
+  </div>
+
+  <div class="card" id="out" hidden>
+    <h2 style="font-size:15px;font-weight:500;margin-bottom:.75rem">结果</h2>
+    <div id="cardbox" style="text-align:center;margin-bottom:1rem" hidden>
+      <img id="cardImg" alt="请客卡"
+           style="max-width:300px;width:100%;border-radius:12px;border:1px solid var(--line)">
+      <div id="cardTip" style="font-size:12px;color:var(--ink-2);margin-top:.4rem"></div>
+    </div>
+    <pre id="log"></pre>
+  </div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const log = (s) => { $('log').textContent += s + "\n"; };
+
+$('go').addEventListener('click', async () => {
+  const btn = $('go');
+  btn.disabled = true;
+  $('out').hidden = false;
+  $('log').textContent = "";
+  log("▶ 正在跑流程…\n");
+
+  const payload = {
+    recipient: $('recipient').value.trim(),
+    budget: $('budget').value,
+    message: $('message').value.trim(),
+    scene: $('scene').value
+  };
+
+  try {
+    const res = await fetch("/api/order", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      log("✗ " + data.error);
+      btn.disabled = false;
+      return;
+    }
+
+    log("✓ 订单已创建\n");
+    log("订单号: " + (data.orderId || "-"));
+
+    // 先把预览卡推出来
+    showCard("card_preview.png", "预览卡 · 付款后会自动换成正式卡");
+
+    if (data.payUrl) {
+      log("支付链接:\n" + data.payUrl);
+      log("\n请用手机打开这个链接付款。");
+      log("付完页面会自动检测，并把卡片换成带订单尾号的正式版。\n");
+    } else {
+      log("（接口未返回支付链接，原始返回见下方）");
+      log(JSON.stringify(data.raw, null, 2));
+    }
+
+    // 轮询订单状态：付款成功就把卡片换成正式卡
+    if (data.orderId) {
+      log("⏳ 等待付款…");
+      poll(data.orderId, btn);
+    } else {
+      btn.disabled = false;
+    }
+  } catch (e) {
+    log("✗ 请求失败: " + e.message);
+    btn.disabled = false;
+  }
+});
+
+function showCard(name, tip) {
+  const box = $('cardbox'), img = $('cardImg');
+  img.src = "/output/" + name + "?t=" + Date.now();  // 加时间戳防缓存
+  $('cardTip').textContent = tip || "";
+  box.hidden = false;
+}
+
+function poll(orderId, btn) {
+  let times = 0;
+  const timer = setInterval(async () => {
+    times++;
+    try {
+      const r = await fetch("/api/status?orderId=" + encodeURIComponent(orderId));
+      const d = await r.json();
+      if (d.error) {
+        log("（状态查询：" + d.error + "）");
+      } else if (d.paid) {
+        clearInterval(timer);
+        log("\n✓ 付款成功");
+        showCard("card_final.png", "正式卡 · 含订单尾号");
+        log("正式卡已生成，可以保存发给他了。");
+        btn.disabled = false;
+        return;
+      } else if (d.status) {
+        log("  当前状态：" + d.status);
+      }
+    } catch (e) {
+      // 静默，网络抖动不影响主流程
+    }
+    if (times >= 60) {   // 约 5 分钟后停止，避免无限轮询
+      clearInterval(timer);
+      log("\n（已停止自动查询，刷新页面或重新提交可继续）");
+      btn.disabled = false;
+    }
+  }, 5000);
+}
+</script>
+</body>
+</html>

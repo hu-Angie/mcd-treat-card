@@ -119,11 +119,11 @@ def main() -> int:
     store_code = store.get("storeCode")
     be_code = store.get("beCode")
 
+    margs = {"storeCode": store_code, "beType": be_type, "orderType": order_type}
+    if be_code:
+        margs["beCode"] = be_code
     try:
-        args = {"storeCode": store_code, "beType": be_type, "orderType": order_type}
-        if be_code:
-            args["beCode"] = be_code
-        menu_raw = c.call_tool_data("query-meals", args)
+        menu_raw = c.call_tool_data("query-meals", margs)
         n_menu = len(menu_raw.get("meals", {})) if isinstance(menu_raw, dict) else 0
         n_cat = len(menu_raw.get("categories", [])) if isinstance(menu_raw, dict) else 0
         print(f"[6/7] 菜单    {'✓' if n_menu else '×'}  {n_menu} 个菜品 / {n_cat} 个分类")
