@@ -177,11 +177,23 @@ mcd-treat-card/
 ├─ scripts/
 │   ├─ mcp_client.py         MCP Streamable HTTP 传输层（协议级，零业务字段）
 │   ├─ probe.py              接口侦察：取回官方 README 缺失的 inputSchema
-│   ├─ card_render.py        卡片模板 → 1080×1440 PNG
-│   └─ treat.py              主流程编排
-├─ templates/card.html       卡片模板（string.Template，无额外依赖）
-├─ fixtures/                 接口真实返回样本（真实数据不入库）
-├─ tests/                    离线自测（不消耗真实调用额度）
+│   ├─ recommender.py        组单引擎：主食×小食×饮料，按场景加权
+│   ├─ card_render.py         卡片模板 → 1080×1440 PNG
+│   └─ treat.py                主流程编排
+├─ templates/card.html        卡片模板（string.Template，无额外依赖）
+├─ fixtures/
+│  ├─ menu_sample.json        脱敏菜单样本（可公开，用于离线开发）
+│  ├─ tools_schema.json       35 个工具的 inputSchema
+│  └─ raw_*.json              真实响应（含地址/券，不入库）
+├─ tests/                     离线自测（不消耗真实调用额度）
+├─ docs/
+│  ├─ 接口事实清单.md          全部实测结论
+│  └─ sample_card.png          真实渲染样例
+├─ README.md
+├─ CONTEST_DECLARATION.md      参赛声明，官方原文
+├─ MCP_INTEGRATION.md
+├─ mcp-config.example.json
+└─ workbuddy.md
 ├─ README.md
 ├─ CONTEST_DECLARATION.md    参赛声明，官方原文
 ├─ MCP_INTEGRATION.md
@@ -242,11 +254,18 @@ JSON 位置三种形态都有（有标记 / 无标记 / `data` 本身是 Markdow
 ## 测试
 
 ```bash
-python -m tests.test_parsers
-python -m tests.test_recommender
+python -m tests.test_mcp_client_offline   # 传输层：21 项
+python -m tests.test_recommender          # 组单引擎：15 项
+python -m tests.test_pipeline             # 端到端链路：7 项
 ```
 
-全部基于 `fixtures/` 离线运行，**不消耗真实调用额度**。
+共 **43 项**，全部基于 `fixtures/` 离线运行，**不消耗任何真实调用额度**，可随时重跑。
+
+| 测试 | 覆盖 |
+|---|---|
+| 传输层 | 握手与会话 ID 透传、JSON/TOON/SSE 解析、401 中止、429 退避、缺 Token 提示 |
+| 组单引擎 | 角色分类、排除蘸酱与周边、主食必选、预算约束、三套主食互不相同、场景加权 |
+| 端到端 | 菜单 fixture → 组单 → 预览卡 PNG → 正式卡 PNG（含尺寸校验） |
 
 ---
 
