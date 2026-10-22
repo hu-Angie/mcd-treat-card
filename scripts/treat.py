@@ -262,18 +262,93 @@ def _now_str() -> str:
     return datetime.now().strftime("%Y.%m.%d  %H:%M")
 
 
+def _run(flow, args) -> None:
+    """跑完整链路：时间 → 地址 → 门店 → 菜单 → 组单 → 预览卡。
+
+    默认停在「待付款」，不下单。
+    """
+    # 1) 时间
+    now = flow.collect(args.recipient, args.scene, args.budget, args.message)
+    print(f"[1/6] 时间    ✓  {now.get('formatted')}  时段={flow.s.time_slot}")
+
+    # 2) 地址
+    addrs = _as_list(flow.addresses())
+    if not addrs:
+        print("[2/6] 地址    ×  账户无配送地址")
+        print("\n先创建地址：")
+        print("  python scripts/probe.py call delivery-create-address "
+              '\'{"address":"..","addressDetail":"..","city":"..",'
+              '"contactName":"..","phone":".."}\'')
+        return
+    addr = addrs[0]
+    addr_id = addr.get("addressId") or addr.get("id")
+    print(f"[2/6] 地址    ✓  id={str(addr_id)[:12]}")
+
+    # 3) 门店
+    stores = flow.stores(addr_id)
+    open_stores = [s for s in stores if s.get("businessStatus") is True]
+    print(f"[3/6] 门店    {'✓' if open_stores else '×'}  "
+          f"可配送 {len(stores)} 家，营业中 {len(open_stores)} 家")
+    if not open_stores:
+        print("\n当前时段无营业门店，换个时间再跑。")
+        return
+
+    store = open_stores[0]
+    sc, bc = store.get("storeCode"), store.get("beCode")
+
+    # 4) 菜单
+    menu_raw = flow.menu(sc, bc)
+    n_menu = len(menu_raw.get("meals", {})) if isinstance(menu_raw, dict) else 0
+    n_cat = len(menu_raw.get("categories", [])) if isinstance(menu_raw, dict) else 0
+    print(f"[4/6] 菜单    {'✓' if n_menu else '×'}  {n_menu} 个菜品 / {n_cat} 个分类")
+    if not n_menu:
+        return
+
+    # 5) 组单
+    items = load_menu(menu_raw)
+    combos = build_combos(items, scene=args.scene, budget=args.budget)
+    if not combos:
+        print("[5/6] 组单    ×  预算内无可行组合")
+        return
+    print(f"[5/6] 组单    ✓  {len(combos)} 套候选")
+
+    # 6) 卡片
+    out = render_card(
+        recipient=args.recipient,
+        message=args.message or "记得吃饭",
+        items=[(i.name, "") for i in combos[0].items],
+        timestamp=_now_str(),
+        preview=True,
+        out=str(ROOT / "output" / "verify_card.png"),
+    )
+    print(f"[6/6] 卡片    ✓  {out}")
+    print("\n★ 全流程未触发 create-order。真下单请加 --confirm。")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="McTreat 请客卡流程")
-    ap.add_argument("cmd", choices=["time", "addr", "stores", "menu", "coupons"])
+    ap.add_argument("cmd", choices=["time", "addr", "stores", "menu", "coupons", "run", "order"])
+    ap.add_argument("--city")
     ap.add_argument("--address-id")
     ap.add_argument("--store-code")
     ap.add_argument("--be-code")
+    ap.add_argument("--recipient", default="朋友")
+    ap.add_argument("--scene", default="overtime",
+                    choices=["overtime", "longdistance", "apology", "care"])
+    ap.add_argument("--budget")
+    ap.add_argument("--message", default="")
+    ap.add_argument("--confirm", action="store_true")
     args = ap.parse_args()
 
+    budget = Decimal(args.budget) if args.budget else None
     flow = TreatFlow()
 
     try:
-        if args.cmd == "time":
+        if args.cmd == "run":
+            _run(flow, args)
+        elif args.cmd == "order":
+            _order(flow, args)
+        elif args.cmd == "time":
             print(json.dumps(flow.collect("测试", "overtime", None, ""), ensure_ascii=False)[:500])
         elif args.cmd == "addr":
             print(str(flow.addresses())[:800])
@@ -286,6 +361,20 @@ def main() -> None:
     except McpError as e:
         print(f"[ERROR] {e}")
         sys.exit(1)
+
+
+def _order(flow, args) -> None:
+    """真实建单。★ 必须带 --confirm。"""
+    if not args.confirm:
+        print("[中止] 真实下单必须显式加 --confirm。")
+        print("  python scripts/treat.py order --recipient 张伟 --store-code X --be-code Y --address-id Z --confirm")
+        sys.exit(2)
+    res = flow.create_order(confirmed=True)
+    print(json.dumps(res, ensure_ascii=False, indent=2)[:2000])
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":
