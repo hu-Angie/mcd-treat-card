@@ -20,9 +20,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from mcp_client import McpClient, McpError  # noqa: E402
+from mcp_client import McpAuthError, McpClient, McpError  # noqa: E402
 from recommender import build_combos, load_menu  # noqa: E402
 from card_render import render_card  # noqa: E402
+import contacts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -92,6 +93,26 @@ class TreatFlow:
 
     def addresses(self):
         return self.c.call_tool_data("delivery-query-addresses")
+
+    def resolve_recipient(self, name: str) -> str | None:
+        """人名 → 麦当劳账户里的地址 ID。
+
+        已建过就直接复用通讯录里记着的 mcdAddressId，不重复创建；
+        没建过才调 delivery-create-address，并把拿到的 ID 回填。
+        """
+        ct = contacts.get(name)
+        if not ct:
+            return None
+        if ct.get("mcdAddressId"):
+            return ct["mcdAddressId"]
+
+        args = {k: v for k, v in contacts.mcp_args(ct).items() if v is not None}
+        res = self.c.call_tool_data("delivery-create-address", args)
+        aid = _first_key(res, ("addressId", "id", "address_id"))
+        if aid:
+            contacts.set_address_id(name, str(aid))
+            return str(aid)
+        return None
 
     def create_address(
         self,
