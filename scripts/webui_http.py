@@ -148,8 +148,9 @@ class Handler(BaseHTTPRequestHandler):
             PENDING[str(oid)] = {"session": s, "client": c}
             self._json({
                 "orderId": str(oid),
-                "payUrl": (res.get("payUrl") or res.get("payLink")
-                           or res.get("url") or ""),
+                # 实测字段名是 payH5Url（不是 payUrl / payLink）
+                "payUrl": (res.get("payH5Url") or res.get("payUrl")
+                           or res.get("payLink") or res.get("url") or ""),
                 "raw": res,
                 "preview": "card_preview.png",
             })
