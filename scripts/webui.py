@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from mcp_client import McpAuthError, McpClient, McpError  # noqa: E402
-from recommender import build_combos, load_menu  # noqa: E402
+from recommender import ROLE_MAIN, build_combos, load_menu  # noqa: E402
 from card_render import render_card  # noqa: E402
 import contacts  # noqa: E402
 
@@ -147,7 +147,18 @@ def run_plan(c: McpClient, s: Session) -> dict:
     s.combos = build_combos(items, scene=s.scene, budget=s.budget)
 
     if not s.combos:
-        return {"error": "预算内没有可行组合"}
+        # 光说"没有组合"用户不知道该怎么办，得告诉他差多少
+        mains = [i for i in items if i.role == ROLE_MAIN]
+        if mains:
+            cheap = min(m.price for m in mains)
+            suggest = cheap + Decimal("8")
+            return {
+                "error": f"预算 ¥{s.budget} 内组不出一份正餐。"
+                         f"该门店最便宜的主食 ¥{cheap}，建议预算不低于 ¥{suggest}",
+                "cheapestMain": str(cheap),
+                "suggestedBudget": str(suggest),
+            }
+        return {"error": "该门店当前没有可点的主食"}
 
     return {
         "slot": slot,
