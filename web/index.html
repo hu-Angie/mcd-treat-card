@@ -94,6 +94,12 @@
 
   <div class="card" id="out" hidden>
     <h2 style="font-size:15px;font-weight:500;margin-bottom:.75rem">结果</h2>
+    <div id="qrbox" style="text-align:center;margin-bottom:1.25rem" hidden>
+      <img id="qrImg" alt="付款二维码"
+           style="width:220px;height:220px;border:1px solid var(--line);border-radius:10px;background:#fff">
+      <div style="font-size:13px;font-weight:500;margin-top:.5rem">扫这个码付款</div>
+      <div id="qrTip" style="font-size:12px;color:var(--ink-2)"></div>
+    </div>
     <div id="cardbox" style="text-align:center;margin-bottom:1rem" hidden>
       <img id="cardImg" alt="请客卡"
            style="max-width:300px;width:100%;border-radius:12px;border:1px solid var(--line)">
@@ -141,10 +147,21 @@ $('go').addEventListener('click', async () => {
     // 先把预览卡推出来
     showCard("card_preview.png", "预览卡 · 付款后会自动换成正式卡");
 
+    // 二维码优先：直接扫，比复制链接方便
+    if (data.qr) {
+      $('qrImg').src = "/output/" + data.qr + "?t=" + Date.now();
+      $('qrTip').textContent = "微信 / 支付宝 均可";
+      $('qrbox').hidden = false;
+    }
+
     if (data.payUrl) {
       log("支付链接:\n" + data.payUrl);
-      log("\n请用手机打开这个链接付款。");
-      log("付完页面会自动检测，并把卡片换成带订单尾号的正式版。\n");
+      if (data.qr) {
+        log("\n付完页面会自动检测，并把卡片换成带订单尾号的正式版。\n");
+      } else {
+        log("\n（未安装 qrcode 库，无法生成二维码，请复制链接到手机打开）");
+        log("付完页面会自动检测，并把卡片换成带订单尾号的正式版。\n");
+      }
     } else {
       log("（接口未返回支付链接，原始返回见下方）");
       log(JSON.stringify(data.raw, null, 2));

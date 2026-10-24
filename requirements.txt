@@ -1,0 +1,12 @@
+# 业务逻辑（recommender / contacts / card_render 的模板）只依赖标准库，
+# 下面按用途分开，缺哪个只会影响对应功能，不会让整个项目跑不起来。
+
+# MCP 传输层（scripts/mcp_client.py、probe.py 需要）
+httpx
+
+# 付款二维码（Web UI 可选：装了就在页面直接显示二维码，
+# 没装则自动回退成显示支付链接文本）
+qrcode[pil]
+
+# 卡片渲染（scripts/card_render.py 需要，装完还要 playwright install chromium）
+playwright

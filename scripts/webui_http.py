@@ -33,6 +33,12 @@ from webui import (  # noqa: E402
 )
 from mcp_client import McpAuthError, McpError  # noqa: E402
 
+# 可选依赖：装了就能在页面直接显示付款二维码
+try:
+    import qrcode
+except ImportError:
+    qrcode = None
+
 WEB = ROOT / "web"
 
 # order_id -> {"session": Session, "client": McpClient}
@@ -40,6 +46,27 @@ PENDING: dict[str, dict] = {}
 
 # 订单状态字段名官方未文档化，做尽力而为的匹配
 PAID_WORDS = ("已支付", "已付款", "支付成功", "待出餐", "出餐中", "制作中", "配送中")
+
+
+def make_qr(text: str) -> str | None:
+    """把付款链接生成本地二维码 PNG，返回文件名。
+
+    本地生成，不调任何在线二维码服务 —— 支付链接不外传。
+    没装 qrcode 就返回 None，页面回退到显示链接文本。
+    """
+    if not text or qrcode is None:
+        return None
+    try:
+        q = qrcode.QRCode(box_size=12, border=3)
+        q.add_data(text)
+        q.make(fit=True)
+        img = q.make_image(fill_color="black", back_color="white")
+        out = ROOT / "output" / "pay_qr.png"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        img.save(str(out))
+        return "pay_qr.png"
+    except Exception:
+        return None
 
 
 def _mk_session(body: dict) -> Session:
@@ -146,11 +173,13 @@ class Handler(BaseHTTPRequestHandler):
             oid = first_key(res, ("orderId", "id", "orderNo")) or ""
             s.order_id = str(oid)
             PENDING[str(oid)] = {"session": s, "client": c}
+            pay_url = (res.get("payH5Url") or res.get("payUrl")
+                       or res.get("payLink") or res.get("url") or "")
             self._json({
                 "orderId": str(oid),
                 # 实测字段名是 payH5Url（不是 payUrl / payLink）
-                "payUrl": (res.get("payH5Url") or res.get("payUrl")
-                           or res.get("payLink") or res.get("url") or ""),
+                "payUrl": pay_url,
+                "qr": make_qr(pay_url),
                 "raw": res,
                 "preview": "card_preview.png",
             })
