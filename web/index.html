@@ -150,7 +150,7 @@ $('go').addEventListener('click', async () => {
     // 二维码优先：直接扫，比复制链接方便
     if (data.qr) {
       $('qrImg').src = "/output/" + data.qr + "?t=" + Date.now();
-      $('qrTip').textContent = "微信 / 支付宝 均可";
+      $('qrTip').textContent = "扫码打开麦当劳支付页，再选微信或支付宝付款";
       $('qrbox').hidden = false;
     }
 
