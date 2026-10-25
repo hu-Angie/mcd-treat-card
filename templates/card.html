@@ -17,7 +17,7 @@
     --ink-soft: #4A3B2A;
     --red: #DA291C;
     --gold: #FFC72C;
-    --ikb: #002FA7;
+    --ikb: #C2532E;
     --cream: #FFF7EC;
   }
 
@@ -31,7 +31,7 @@
     color: var(--ink);
     font-family: var(--han);
     background:
-      radial-gradient(120% 90% at 20% 12%, #FFFDF6 0%, #FFF1DC 45%, #FDE7C9 100%);
+      radial-gradient(120% 90% at 20% 12%, #FFF9F1 0%, #FCEBD3 45%, #F7D9B4 100%);
   }
 
   /* —— RISO 多色套印色块层（克莱因蓝 / 珊瑚 / 金 / 薄荷，错位叠加） —— */
@@ -47,7 +47,7 @@
   /* —— 罗尔纯半色调网点（克莱因蓝网点） —— */
   .halftone {
     position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(0,47,167,.16) 1.4px, transparent 1.6px);
+    background-image: radial-gradient(circle, rgba(199,85,40,.18) 1.4px, transparent 1.6px);
     background-size: 10px 10px;
     mix-blend-mode: multiply;
     opacity: .55;
@@ -251,24 +251,24 @@
   <div class="card">
     <!-- RISO 错位套印色块 -->
     <svg class="riso" viewBox="0 0 1080 1440" preserveAspectRatio="none">
-      <g opacity="0.55">
-        <ellipse cx="235" cy="250" rx="370" ry="320" fill="#002FA7"/>
-        <ellipse cx="245" cy="262" rx="370" ry="320" fill="#FF6B6B" opacity="0.6"/>
-      </g>
       <g opacity="0.5">
+        <ellipse cx="235" cy="250" rx="370" ry="320" fill="#E8743B"/>
+        <ellipse cx="245" cy="262" rx="370" ry="320" fill="#FF8A8A" opacity="0.6"/>
+      </g>
+      <g opacity="0.48">
         <ellipse cx="905" cy="1190" rx="400" ry="340" fill="#FFC72C"/>
-        <ellipse cx="896" cy="1180" rx="400" ry="340" fill="#8FE3C4" opacity="0.55"/>
+        <ellipse cx="896" cy="1180" rx="400" ry="340" fill="#FFB27A" opacity="0.6"/>
+      </g>
+      <g opacity="0.42">
+        <ellipse cx="950" cy="215" rx="270" ry="230" fill="#FF8A8A"/>
+        <ellipse cx="942" cy="207" rx="270" ry="230" fill="#F0A868" opacity="0.6"/>
       </g>
       <g opacity="0.4">
-        <ellipse cx="950" cy="215" rx="270" ry="230" fill="#FF8A8A"/>
-        <ellipse cx="942" cy="207" rx="270" ry="230" fill="#002FA7" opacity="0.5"/>
-      </g>
-      <g opacity="0.34">
-        <ellipse cx="170" cy="1250" rx="310" ry="250" fill="#8FE3C4"/>
+        <ellipse cx="170" cy="1250" rx="310" ry="250" fill="#FFB27A"/>
         <ellipse cx="178" cy="1242" rx="310" ry="250" fill="#FFC72C" opacity="0.5"/>
       </g>
-      <g opacity="0.26">
-        <ellipse cx="540" cy="760" rx="300" ry="260" fill="#FF6B6B"/>
+      <g opacity="0.3">
+        <ellipse cx="540" cy="760" rx="300" ry="260" fill="#FF9E5E"/>
       </g>
     </svg>
 
@@ -349,7 +349,7 @@
         <div class="tape"></div>
         <div class="msg">$message
           <svg class="msg-underline" viewBox="0 0 280 18">
-            <path d="M6 11 q26 -9 52 0 t52 0 t52 0 t52 0 t52 0" fill="none" stroke="#002FA7" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M6 11 q26 -9 52 0 t52 0 t52 0 t52 0 t52 0" fill="none" stroke="#E8743B" stroke-width="3.5" stroke-linecap="round"/>
           </svg>
         </div>
       </div>
