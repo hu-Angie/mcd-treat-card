@@ -5,23 +5,26 @@
 <title>麦麦请客卡</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Zhi+Mang+Xing&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root{
     --han: "ZCOOL KuaiLe", "Microsoft YaHei", "PingFang SC", sans-serif;
     --hand: "Ma Shan Zheng", "STXingkai", "Xingkai SC", "KaiTi", "楷体", cursive;
+    --pen: "Zhi Mang Xing", "STXingkai", "Xingkai SC", "KaiTi", "楷体", cursive;
     --latin: "Caveat", "Segoe Script", cursive;
     --brown-deep: #4A2B1A;
     --brown: #6B4A32;
     --red: #E23B2E;
     --red-deep: #D63324;
+    --maroon: #A03A22;
+    --yellow: #F0A32F;
     --cream: #FFFDF8;
-    --panel: #FCEFC4;
+    --panel: #F6DFA6;
   }
 
-  html, body{ background:#F7E3D4; }
+  html, body{ background:#F6DCD2; }
 
   .card {
     width: 1080px;
@@ -31,7 +34,7 @@
     color: var(--brown-deep);
     font-family: var(--han);
     background:
-      radial-gradient(130% 100% at 50% 0%, #FAEBDE 0%, #F6DFCB 55%, #F1D4BC 100%);
+      radial-gradient(130% 100% at 50% 0%, #FAE8E0 0%, #F5D8CC 55%, #EFC9BA 100%);
   }
 
   /* 颗粒质感 */
@@ -52,12 +55,12 @@
   }
 
   .title {
-    font-family: var(--hand);
-    font-size: 86px;
+    font-family: var(--han);
+    font-size: 92px;
     color: var(--brown-deep);
-    letter-spacing: 8px;
-    text-indent: 8px;
-    line-height: 1.15;
+    letter-spacing: 10px;
+    text-indent: 10px;
+    line-height: 1.12;
   }
 
   /* —— 拍立得白框 —— */
@@ -73,26 +76,39 @@
 
   /* 暖黄照片区 */
   .photo {
-    background: var(--panel);
-    border-radius: 14px;
+    background: linear-gradient(180deg, #F9E8B8 0%, #F6DFA6 55%, #F2D48C 100%);
+    border-radius: 12px;
     padding: 30px 30px 34px 30px;
-    box-shadow: inset 0 0 0 1px rgba(210, 160, 90, .25);
+    box-shadow: inset 0 0 0 1px rgba(214, 164, 80, .30);
   }
 
   .mcd-treat {
     font-family: var(--latin);
     font-weight: 700;
-    font-size: 104px;
+    font-size: 108px;
     line-height: 1;
     color: var(--red);
     letter-spacing: 2px;
   }
+  .mcd-treat::before,
+  .mcd-treat::after{
+    content: "";
+    display: inline-block;
+    width: 44px; height: 20px;
+    border-top: 6px solid var(--red);
+    border-radius: 50%;
+    vertical-align: 30px;
+  }
+  .mcd-treat::before{ transform: rotate(-16deg); margin-right: 20px; }
+  .mcd-treat::after { transform: rotate(16deg);  margin-left: 20px; }
+
   .flourish {
     font-family: var(--latin);
-    font-size: 36px;
-    color: var(--red);
-    margin-top: 6px;
-    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 60px;
+    color: var(--yellow);
+    margin-top: 2px;
+    letter-spacing: 2px;
   }
 
   .scene { width: 100%; height: auto; display: block; margin-top: 4px; }
@@ -126,9 +142,9 @@
   }
 
   .quote {
-    font-family: var(--hand);
-    font-size: 50px;
-    line-height: 1.55;
+    font-family: var(--pen);
+    font-size: 54px;
+    line-height: 1.5;
     color: #D8402C;
     letter-spacing: 2px;
     max-width: 720px;
@@ -151,18 +167,27 @@
   }
   .meta .tail { margin-top: 8px; color: var(--red); }
 
-  /* —— 底部已点餐食条 —— */
+  /* —— 底部已点餐食条（撕纸边） —— */
   .strip {
     margin-top: 26px;
     width: 100%;
     background: #F5E7CE;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 1px rgba(190, 140, 80, .25);
-    padding: 18px 26px;
-    font-size: 27px;
-    color: #4A3222;
+    transform: rotate(-.5deg);
+    filter: drop-shadow(0 4px 8px rgba(150, 95, 55, .14));
+    clip-path: polygon(
+      0% 20%, 2% 8%, 4% 18%, 6% 4%, 8% 15%,
+      50% 6%, 92% 12%, 94% 4%, 96% 16%, 98% 6%, 100% 14%,
+      98% 26%, 100% 40%, 97% 54%, 100% 68%, 98% 82%, 100% 90%,
+      96% 84%, 94% 96%, 50% 90%, 8% 94%, 6% 84%, 4% 96%, 2% 86%, 0% 92%,
+      2% 76%, 0% 62%, 3% 48%, 0% 34%
+    );
+    padding: 24px 30px;
+    font-family: var(--han);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--maroon);
     letter-spacing: 1px;
-    line-height: 1.85;
+    line-height: 1.8;
     text-align: center;
   }
   .strip-label { font-family: var(--han); }
@@ -170,7 +195,7 @@
   .item span + span { margin-left: 4px; }
   .item + .item::before {
     content: "丨";
-    color: #C9A97E;
+    color: #D8B48A;
     margin: 0 12px;
   }
 
@@ -221,7 +246,7 @@
       <div class="polaroid">
         <div class="photo">
           <div class="mcd-treat">McD Treat</div>
-          <div class="flourish">— Order placed! &nbsp;/&nbsp; It's my treat! —</div>
+          <div class="flourish">Enjoy it!</div>
 
           <!-- 卡哇伊汉堡 + 薯条 -->
           <svg class="scene" viewBox="0 0 700 400">
