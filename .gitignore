@@ -11,6 +11,10 @@ fixtures/raw_*.json
 # 生成的卡片（脱敏后的样例图会单独放进 docs/）
 output/
 
+# 设计稿工作目录：用户的原始 SVG（7.8MB）与抠字中间产物，只保留导出的
+# templates/assets/card_bg.webp 入库；原始 zip 由用户自行保存
+_tmp_svg/
+
 __pycache__/
 *.pyc
 .venv/

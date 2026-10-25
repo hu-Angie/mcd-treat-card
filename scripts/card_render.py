@@ -6,12 +6,14 @@
 
 from __future__ import annotations
 
+import base64
 import html
 from pathlib import Path
 from string import Template
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "card.html"
+BG_ASSET = ROOT / "templates" / "assets" / "card_bg.webp"
 OUTPUT_DIR = ROOT / "output"
 
 
@@ -50,8 +52,14 @@ def render_card(
     badge_html = '<div class="badge">预览</div>' if preview else ""
     eta_html = '<div class="tail">{}</div>'.format(html.escape(eta)) if eta else ""
 
+    # 设计底图内联为 data URI：set_content 无 base URL，相对路径会失效
+    if not BG_ASSET.exists():
+        raise FileNotFoundError(f"找不到设计底图：{BG_ASSET}")
+    bg_uri = "data:image/webp;base64," + base64.b64encode(BG_ASSET.read_bytes()).decode()
+
     page_html = tpl.substitute(
         badge_html=badge_html,
+        bg_uri=bg_uri,
         recipient=html.escape(recipient),
         subtitle=html.escape(subtitle),
         message=html.escape(message),
@@ -80,9 +88,9 @@ def render_card(
         try:
             page = browser.new_page(viewport={"width": 1080, "height": 1440})
             page.set_content(page_html, wait_until="load")
-            # 等网络字体（手写体 / 标题体）加载完成，避免截图时回退到系统字体
+            # 等网络字体（手写体 / 可爱体）加载完成，避免截图时回退到系统字体
             try:
-                page.wait_for_timeout(2200)
+                page.wait_for_timeout(2500)
             except Exception:
                 pass
             page.screenshot(path=str(out_path))

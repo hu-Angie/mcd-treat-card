@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <title>麦麦请客卡</title>
+<!--
+  卡片设计定稿（用户提供的 SVG 水彩稿）：
+  底图为 templates/assets/card_bg.webp（由原 SVG 抠除动态文字后导出），
+  版式/插画/标题全部烧在底图里，保证「除文字外一模一样」；
+  本模板只负责把 4 块动态文字叠回原位（坐标按 1728x2304 -> 1080x1440 换算）。
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Zhi+Mang+Xing&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Zhi+Mang+Xing&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root{
     --han: "ZCOOL KuaiLe", "Microsoft YaHei", "PingFang SC", sans-serif;
-    --hand: "Ma Shan Zheng", "STXingkai", "Xingkai SC", "KaiTi", "楷体", cursive;
     --pen: "Zhi Mang Xing", "STXingkai", "Xingkai SC", "KaiTi", "楷体", cursive;
     --latin: "Caveat", "Segoe Script", cursive;
-    --brown-deep: #4A2B1A;
-    --brown: #6B4A32;
-    --red: #E23B2E;
-    --red-deep: #D63324;
-    --maroon: #A03A22;
-    --yellow: #F0A32F;
-    --cream: #FFFDF8;
-    --panel: #F6DFA6;
+    --brown-deep: #572514;
+    --red: #CE2312;
+    --maroon: #6B2A15;
   }
 
   html, body{ background:#F6DCD2; }
@@ -33,198 +33,118 @@
     overflow: hidden;
     color: var(--brown-deep);
     font-family: var(--han);
-    background:
-      radial-gradient(130% 100% at 50% 0%, #FAE8E0 0%, #F5D8CC 55%, #EFC9BA 100%);
+    background-color: #F6DCD2;
+    background-image: url("$bg_uri");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
   }
 
-  /* 颗粒质感 */
-  .grain {
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    mix-blend-mode: overlay;
-    opacity: .35;
-    pointer-events: none;
-  }
+  /* —— 动态文字层（坐标 = 原稿位置 x 0.625） —— */
 
-  .page {
-    position: absolute; inset: 0;
-    padding: 58px 92px 118px 92px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .title {
-    font-family: var(--han);
-    font-size: 92px;
-    color: var(--brown-deep);
-    letter-spacing: 10px;
-    text-indent: 10px;
-    line-height: 1.12;
-  }
-
-  /* —— 拍立得白框 —— */
-  .polaroid {
-    margin-top: 26px;
-    width: 844px;
-    background: var(--cream);
-    border-radius: 10px;
-    box-shadow: 0 20px 44px rgba(150, 95, 55, .20), 0 4px 10px rgba(150, 95, 55, .10);
-    padding: 34px 34px 26px 34px;
+  /* 红丝带文案：药丸 x354-733 y914-1006（已烧在底图里，只叠字） */
+  .ribbon-text {
+    position: absolute;
+    left: 354px; top: 914px;
+    width: 379px; height: 92px;
+    line-height: 92px;
     text-align: center;
-  }
-
-  /* 暖黄照片区 */
-  .photo {
-    background: linear-gradient(180deg, #F9E8B8 0%, #F6DFA6 55%, #F2D48C 100%);
-    border-radius: 12px;
-    padding: 30px 30px 34px 30px;
-    box-shadow: inset 0 0 0 1px rgba(214, 164, 80, .30);
-  }
-
-  .mcd-treat {
-    font-family: var(--latin);
-    font-weight: 700;
-    font-size: 108px;
-    line-height: 1;
-    color: var(--red);
-    letter-spacing: 2px;
-  }
-  .mcd-treat::before,
-  .mcd-treat::after{
-    content: "";
-    display: inline-block;
-    width: 44px; height: 20px;
-    border-top: 6px solid var(--red);
-    border-radius: 50%;
-    vertical-align: 30px;
-  }
-  .mcd-treat::before{ transform: rotate(-16deg); margin-right: 20px; }
-  .mcd-treat::after { transform: rotate(16deg);  margin-left: 20px; }
-
-  .flourish {
-    font-family: var(--latin);
-    font-weight: 700;
-    font-size: 60px;
-    color: var(--yellow);
-    margin-top: 2px;
-    letter-spacing: 2px;
-  }
-
-  .scene { width: 100%; height: auto; display: block; margin-top: 4px; }
-
-  .ribbon {
-    display: inline-block;
-    margin-top: 6px;
-    background: var(--red);
-    color: #FFF6E8;
-    font-family: var(--han);
+    white-space: nowrap;
     font-size: 31px;
-    letter-spacing: 3px;
-    padding: 14px 40px;
-    border-radius: 999px;
-    box-shadow: 0 6px 14px rgba(210, 60, 40, .30);
+    letter-spacing: 2px;
+    color: #FFF6EA;
   }
 
-  /* —— 拍立得下半：To / 留言 / 署名 —— */
+  /* To: 收件人（原稿 x292-587 y1707-1763 -> x182-367 y1067-1102） */
   .to {
-    margin-top: 26px;
-    font-size: 42px;
-    color: #3A2B20;
+    position: absolute;
+    left: 182px; top: 1056px;
+    font-size: 46px;
+    line-height: 1;
+    color: var(--brown-deep);
     letter-spacing: 3px;
   }
   .to .to-en {
     font-family: var(--latin);
     font-weight: 700;
-    font-size: 50px;
-    color: #3A2B20;
+    font-size: 52px;
     margin-right: 10px;
   }
 
+  /* 留言（原稿 x410-1352 y1803-1879 -> y1127-1174，水平居中） */
   .quote {
+    position: absolute;
+    left: 50%; top: 1122px;
+    transform: translateX(-50%);
+    width: 780px;
     font-family: var(--pen);
-    font-size: 54px;
+    font-size: 56px;
     line-height: 1.5;
-    color: #D8402C;
+    color: var(--red);
     letter-spacing: 2px;
-    max-width: 720px;
-    margin: 14px auto 0;
+    text-align: center;
   }
 
-  .attrib {
-    font-family: var(--hand);
-    font-size: 32px;
-    color: var(--brown);
-    margin-top: 14px;
-    letter-spacing: 2px;
-  }
-
+  /* 下单时间 / 预计送达（原稿留言与纸条之间的留白） */
   .meta {
-    margin-top: 16px;
-    font-size: 25px;
-    color: #8A6A4F;
+    position: absolute;
+    left: 0; top: 1198px;
+    width: 100%;
+    text-align: center;
+    font-size: 21px;
+    line-height: 1.35;
+    color: #B58A6C;
     letter-spacing: 2px;
   }
-  .meta .tail { margin-top: 8px; color: var(--red); }
+  .meta .tail { margin-top: 3px; color: #C96A4A; }
 
-  /* —— 底部已点餐食条（撕纸边） —— */
+  /* 已点餐食（原稿 x322-1448 y2024-2072 -> y1265-1295） */
   .strip {
-    margin-top: 26px;
+    position: absolute;
+    left: 0; top: 1258px;
     width: 100%;
-    background: #F5E7CE;
-    transform: rotate(-.5deg);
-    filter: drop-shadow(0 4px 8px rgba(150, 95, 55, .14));
-    clip-path: polygon(
-      0% 20%, 2% 8%, 4% 18%, 6% 4%, 8% 15%,
-      50% 6%, 92% 12%, 94% 4%, 96% 16%, 98% 6%, 100% 14%,
-      98% 26%, 100% 40%, 97% 54%, 100% 68%, 98% 82%, 100% 90%,
-      96% 84%, 94% 96%, 50% 90%, 8% 94%, 6% 84%, 4% 96%, 2% 86%, 0% 92%,
-      2% 76%, 0% 62%, 3% 48%, 0% 34%
-    );
-    padding: 24px 30px;
-    font-family: var(--han);
-    font-size: 28px;
+    text-align: center;
+    font-size: 34px;
     font-weight: 700;
     color: var(--maroon);
     letter-spacing: 1px;
-    line-height: 1.8;
-    text-align: center;
+    white-space: nowrap;
   }
   .strip-label { font-family: var(--han); }
   .item { display: inline; }
   .item span + span { margin-left: 4px; }
   .item + .item::before {
     content: "丨";
-    color: #D8B48A;
-    margin: 0 12px;
+    color: #C9A97E;
+    margin: 0 10px;
   }
 
+  /* 署名与参赛声明（底图留白处，非常淡） */
   .brand {
     position: absolute;
-    right: 62px; bottom: 74px;
+    right: 56px; bottom: 64px;
     font-family: var(--latin);
     font-weight: 700;
-    font-size: 32px;
-    color: rgba(74, 43, 26, .42);
+    font-size: 30px;
+    color: rgba(87, 37, 20, .42);
     letter-spacing: 1px;
   }
-
   .disclaimer {
     position: absolute;
-    left: 0; right: 0; bottom: 40px;
+    left: 0; right: 0; bottom: 28px;
     text-align: center;
-    font-size: 22px;
-    color: rgba(74, 43, 26, .38);
+    font-size: 17px;
+    color: rgba(87, 37, 20, .40);
     letter-spacing: 1px;
   }
 
+  /* 预览角标（仅预览卡） */
   .badge {
     position: absolute;
-    top: 54px; right: 58px;
+    top: 44px; right: 48px;
     font-family: var(--han);
     font-size: 30px;
-    color: var(--red);
-    border: 4px double var(--red);
+    color: #E23B2E;
+    border: 4px double #E23B2E;
     border-radius: 12px;
     padding: 8px 20px;
     letter-spacing: 6px;
@@ -237,80 +157,19 @@
 </head>
 <body>
   <div class="card">
-    <div class="grain"></div>
     $badge_html
 
-    <div class="page">
-      <div class="title">麦麦请客卡</div>
+    <div class="ribbon-text">$subtitle</div>
 
-      <div class="polaroid">
-        <div class="photo">
-          <div class="mcd-treat">McD Treat</div>
-          <div class="flourish">Enjoy it!</div>
+    <div class="to"><span class="to-en">To:</span>$recipient</div>
+    <div class="quote">“$message”</div>
 
-          <!-- 卡哇伊汉堡 + 薯条 -->
-          <svg class="scene" viewBox="0 0 700 400">
-            <!-- 涂鸦：波浪线 / 圆点 / 星星 / 爱心 -->
-            <g fill="none" stroke="#E8956B" stroke-width="5" stroke-linecap="round">
-              <path d="M36 158 q14 -18 28 0 q14 18 28 0"/>
-              <path d="M612 118 q12 -16 24 0 q12 16 24 0"/>
-              <path d="M648 316 q18 14 0 28 q-18 14 0 28"/>
-              <path d="M46 306 q-16 14 0 28 q16 14 0 28"/>
-            </g>
-            <circle cx="66" cy="236" r="12" fill="none" stroke="#E23B2E" stroke-width="5"/>
-            <circle cx="652" cy="182" r="9" fill="#F08A3C"/>
-            <path transform="translate(98,96) scale(1.15)" d="M0 -30 L8.8 -9.3 30 -9.3 12.6 3.5 18.5 24.3 0 12 -18.5 24.3 -12.6 3.5 -30 -9.3 -8.8 -9.3 Z" fill="#F08A3C"/>
-            <path transform="translate(598,252) scale(0.62)" d="M0 -30 L8.8 -9.3 30 -9.3 12.6 3.5 18.5 24.3 0 12 -18.5 24.3 -12.6 3.5 -30 -9.3 -8.8 -9.3 Z" fill="#F6C453"/>
-            <path transform="translate(636,64) scale(1.25)" d="M0 8 C -8 -6 -30 0 -16 16 L0 30 L16 16 C30 0 8 -6 0 8 Z" fill="#E23B2E"/>
-            <path transform="translate(120,344) scale(0.7)" d="M0 8 C -8 -6 -30 0 -16 16 L0 30 L16 16 C30 0 8 -6 0 8 Z" fill="#F08A3C"/>
-
-            <!-- 汉堡小人 -->
-            <g transform="translate(255,230) scale(1.06)">
-              <path d="M-122 62 Q0 98 122 62 L112 88 Q0 112 -112 88 Z" fill="#EFB054"/>
-              <rect x="-118" y="28" width="236" height="36" rx="18" fill="#7A4A2B"/>
-              <path d="M-126 24 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 l0 14 q-126 26 -252 0 Z" fill="#7CB85C"/>
-              <path d="M-128 12 C -70 -96 70 -96 128 12 Q64 30 0 30 Q-64 30 -128 12 Z" fill="#F6C453"/>
-              <g fill="#FBF0D0">
-                <ellipse cx="-54" cy="-22" rx="8" ry="4" transform="rotate(-18 -54 -22)"/>
-                <ellipse cx="-12" cy="-40" rx="8" ry="4" transform="rotate(8 -12 -40)"/>
-                <ellipse cx="32" cy="-36" rx="8" ry="4" transform="rotate(22 32 -36)"/>
-                <ellipse cx="68" cy="-14" rx="8" ry="4" transform="rotate(35 68 -14)"/>
-              </g>
-              <circle cx="-34" cy="-12" r="7.5" fill="#4A3222"/>
-              <circle cx="34" cy="-12" r="7.5" fill="#4A3222"/>
-              <path d="M-17 2 Q0 20 17 2" fill="none" stroke="#4A3222" stroke-width="6" stroke-linecap="round"/>
-              <circle cx="-60" cy="0" r="12" fill="#F49E9E" opacity=".8"/>
-              <circle cx="60" cy="0" r="12" fill="#F49E9E" opacity=".8"/>
-            </g>
-
-            <!-- 薯条（M 盒） -->
-            <g transform="translate(492,222)">
-              <g>
-                <rect x="-70" y="-120" width="30" height="130" rx="14" fill="#F2B93B" transform="rotate(-8 -55 -55)"/>
-                <rect x="-30" y="-138" width="30" height="148" rx="14" fill="#F7C948"/>
-                <rect x="10" y="-130" width="30" height="140" rx="14" fill="#FFD966" transform="rotate(6 25 -60)"/>
-                <rect x="48" y="-112" width="30" height="122" rx="14" fill="#F2B93B" transform="rotate(12 63 -51)"/>
-              </g>
-              <path d="M-92 -20 L92 -20 L74 128 Q0 150 -74 128 Z" fill="#D63324"/>
-              <path d="M-92 10 L92 10 L76 132 Q0 154 -76 132 Z" fill="#E23B2E"/>
-              <path d="M-42 106 L-42 34 L0 84 L42 34 L42 106" fill="none" stroke="#FFF6E8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-            </g>
-          </svg>
-
-          <div class="ribbon">$subtitle</div>
-        </div>
-
-        <div class="to"><span class="to-en">To:</span>$recipient</div>
-        <div class="quote">“$message”</div>
-        <div class="attrib">—— $brand</div>
-        <div class="meta">
-          <div>$timestamp</div>
-          $eta_html
-        </div>
-      </div>
-
-      <div class="strip"><span class="strip-label">已点餐食：</span>$items_html</div>
+    <div class="meta">
+      <div>$timestamp</div>
+      $eta_html
     </div>
+
+    <div class="strip"><span class="strip-label">已点餐食：</span>$items_html</div>
 
     <div class="brand">$brand</div>
     <div class="disclaimer">本卡片为独立参赛作品，非麦当劳官方产品</div>
