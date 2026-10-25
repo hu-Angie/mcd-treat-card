@@ -39,6 +39,22 @@
     background-repeat: no-repeat;
   }
 
+  /* —— 标题托板：标题从底图分离后下移，白色圆角底 —— */
+  .title-plate {
+    position: absolute;
+    left: 50%; top: 112px;
+    transform: translateX(-50%);
+    background: #FFFDF8;
+    border-radius: 30px;
+    padding: 21px 46px 26px;
+    box-shadow: 0 6px 18px rgba(87, 37, 20, .14);
+  }
+  .title-plate img {
+    display: block;
+    width: 809px;
+    height: auto;
+  }
+
   /* —— 动态文字层（坐标 = 原稿位置 x 0.625） —— */
 
   /* 红丝带文案：药丸 x354-733 y914-1006（已烧在底图里，只叠字） */
@@ -158,6 +174,8 @@
 <body>
   <div class="card">
     $badge_html
+
+    <div class="title-plate"><img src="$title_uri" alt="麦麦请客卡"></div>
 
     <div class="ribbon-text">$subtitle</div>
 

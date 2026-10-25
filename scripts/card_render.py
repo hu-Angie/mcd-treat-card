@@ -14,6 +14,7 @@ from string import Template
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "card.html"
 BG_ASSET = ROOT / "templates" / "assets" / "card_bg.webp"
+TITLE_ASSET = ROOT / "templates" / "assets" / "card_title.png"
 OUTPUT_DIR = ROOT / "output"
 
 
@@ -56,10 +57,14 @@ def render_card(
     if not BG_ASSET.exists():
         raise FileNotFoundError(f"找不到设计底图：{BG_ASSET}")
     bg_uri = "data:image/webp;base64," + base64.b64encode(BG_ASSET.read_bytes()).decode()
+    if not TITLE_ASSET.exists():
+        raise FileNotFoundError(f"找不到标题图：{TITLE_ASSET}")
+    title_uri = "data:image/png;base64," + base64.b64encode(TITLE_ASSET.read_bytes()).decode()
 
     page_html = tpl.substitute(
         badge_html=badge_html,
         bg_uri=bg_uri,
+        title_uri=title_uri,
         recipient=html.escape(recipient),
         subtitle=html.escape(subtitle),
         message=html.escape(message),
