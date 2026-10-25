@@ -33,12 +33,13 @@ print("png size:", img.size)
 
 # —— 修补标题幽灵残留 ——
 # 标题浅色阴影与背景水彩斑合并在同一大 path 里无法按路径抠除；
-# 托板(HTML)盖住 card y112 以下，这里把托板上沿以上露出的
-# 残影条带(card y50-115 -> 2x y160-368)用上方干净带(card y0-50)翻转拉伸后羽化贴回。
+# 托板(HTML)已下移到 card y220，残影在托板以上整段露出，
+# 这里把 card y45-168（拍立得白框顶边之前）用上方干净带(card y0-45)
+# 翻转拉伸后羽化贴回。
 W, H = img.size  # 3456x4608
 px_x0, px_x1 = 416, 3072          # card x130-960
-dst_y0, dst_y1 = 160, 368         # card y50-115
-src = img.crop((px_x0, 0, px_x1, 152)).transpose(Image.FLIP_TOP_BOTTOM)
+dst_y0, dst_y1 = 144, 538         # card y45-168
+src = img.crop((px_x0, 0, px_x1, 144)).transpose(Image.FLIP_TOP_BOTTOM)
 src = src.resize((px_x1 - px_x0, dst_y1 - dst_y0), Image.LANCZOS)
 mask = Image.new("L", src.size, 0)
 from PIL import ImageDraw
@@ -48,6 +49,19 @@ d.rectangle((16, 16, src.size[0] - 16, src.size[1] - 16), fill=255)
 mask = mask.filter(ImageFilter.GaussianBlur(10))
 img.paste(src, (px_x0, dst_y0), mask)
 print("ghost patched")
+
+# —— 白框顶部残迹提白：残影下缘延伸进拍立得白框(card y166-208)，向白框底色融合 ——
+wx0, wx1 = 440, 3020               # card x137-944
+wy0, wy1 = 531, 666                # card y166-208
+region = img.crop((wx0, wy0, wx1, wy1))
+white = Image.new("RGB", region.size, (251, 246, 239))
+whitened = Image.blend(region, white, 0.62)
+wmask = Image.new("L", region.size, 0)
+d2 = ImageDraw.Draw(wmask)
+d2.rectangle((20, 0, region.size[0] - 20, region.size[1]), fill=160)
+wmask = wmask.filter(ImageFilter.GaussianBlur(12))
+img.paste(whitened, (wx0, wy0), wmask)
+print("polaroid top whitened")
 
 out = ASSET_DIR / "card_bg.webp"
 img.save(out, "WEBP", quality=88, method=6)
