@@ -13,226 +13,189 @@
     --han: "ZCOOL KuaiLe", "Microsoft YaHei", "PingFang SC", sans-serif;
     --hand: "Ma Shan Zheng", "STXingkai", "Xingkai SC", "KaiTi", "楷体", cursive;
     --latin: "Caveat", "Segoe Script", cursive;
-    --ink: #2B2A28;
-    --ink-soft: #4A3B2A;
-    --red: #DA291C;
-    --gold: #FFC72C;
-    --ikb: #C2532E;
-    --cream: #FFF7EC;
+    --brown-deep: #4A2B1A;
+    --brown: #6B4A32;
+    --red: #E23B2E;
+    --red-deep: #D63324;
+    --cream: #FFFDF8;
+    --panel: #FCEFC4;
   }
 
-  html, body{ background:#FFF7EC; }
+  html, body{ background:#F7E3D4; }
 
   .card {
     width: 1080px;
     height: 1440px;
     position: relative;
     overflow: hidden;
-    color: var(--ink);
+    color: var(--brown-deep);
     font-family: var(--han);
     background:
-      radial-gradient(120% 90% at 20% 12%, #FFF9F1 0%, #FCEBD3 45%, #F7D9B4 100%);
+      radial-gradient(130% 100% at 50% 0%, #FAEBDE 0%, #F6DFCB 55%, #F1D4BC 100%);
   }
 
-  /* —— RISO 多色套印色块层（克莱因蓝 / 珊瑚 / 金 / 薄荷，错位叠加） —— */
-  .riso {
-    position: absolute; inset: 0;
-    width: 1080px; height: 1440px;
-    mix-blend-mode: multiply;
-    filter: blur(1.5px);
-    opacity: .9;
-    pointer-events: none;
-  }
-
-  /* —— 罗尔纯半色调网点（克莱因蓝网点） —— */
-  .halftone {
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(199,85,40,.18) 1.4px, transparent 1.6px);
-    background-size: 10px 10px;
-    mix-blend-mode: multiply;
-    opacity: .55;
-    pointer-events: none;
-  }
-
-  /* —— 颗粒质感（fractalNoise 噪声叠加） —— */
+  /* 颗粒质感 */
   .grain {
     position: absolute; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     mix-blend-mode: overlay;
-    opacity: .42;
+    opacity: .35;
     pointer-events: none;
   }
 
-  /* —— 手绘涂鸦层（卡通烘焙元素 / 星星 / 爱心） —— */
-  .doodles {
+  .page {
     position: absolute; inset: 0;
-    width: 1080px; height: 1440px;
-    pointer-events: none;
-  }
-
-  /* —— 手绘边框 —— */
-  .frame {
-    position: absolute; inset: 34px;
-    border: 3px solid rgba(74,59,42,.5);
-    border-radius: 30px;
-    box-shadow: 0 0 0 3px rgba(255,247,236,.0), inset 0 0 0 7px rgba(74,59,42,.12);
-    pointer-events: none;
-  }
-
-  /* —— 内容层 —— */
-  .content {
-    position: absolute; inset: 0;
-    padding: 92px 96px 120px 96px;
+    padding: 58px 92px 118px 92px;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .title {
+    font-family: var(--hand);
+    font-size: 86px;
+    color: var(--brown-deep);
+    letter-spacing: 8px;
+    text-indent: 8px;
+    line-height: 1.15;
+  }
+
+  /* —— 拍立得白框 —— */
+  .polaroid {
+    margin-top: 26px;
+    width: 844px;
+    background: var(--cream);
+    border-radius: 10px;
+    box-shadow: 0 20px 44px rgba(150, 95, 55, .20), 0 4px 10px rgba(150, 95, 55, .10);
+    padding: 34px 34px 26px 34px;
     text-align: center;
   }
 
-  .tag {
-    font-family: var(--han);
-    font-size: 40px;
-    letter-spacing: 16px;
-    color: var(--ink-soft);
-    text-indent: 16px;
+  /* 暖黄照片区 */
+  .photo {
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 30px 30px 34px 30px;
+    box-shadow: inset 0 0 0 1px rgba(210, 160, 90, .25);
   }
-  .tag-en {
+
+  .mcd-treat {
     font-family: var(--latin);
-    font-size: 30px;
+    font-weight: 700;
+    font-size: 104px;
+    line-height: 1;
     color: var(--red);
     letter-spacing: 2px;
-    margin-top: 2px;
   }
-  .squiggle { margin: 14px 0 6px; }
-
-  .name {
-    font-family: var(--han);
-    font-size: 104px;
-    font-weight: 400;
-    letter-spacing: 10px;
-    line-height: 1.18;
-    text-indent: 10px;
-    margin-top: 18px;
-    color: var(--ink);
-    text-shadow: 3px 4px 0 rgba(255,199,44,.55);
-  }
-
-  .sub {
-    font-family: var(--han);
-    font-size: 34px;
+  .flourish {
+    font-family: var(--latin);
+    font-size: 36px;
     color: var(--red);
     margin-top: 6px;
-    letter-spacing: 3px;
+    letter-spacing: 1px;
   }
 
-  .divider {
-    width: 240px; height: 26px;
-    margin: 30px 0 4px;
-  }
+  .scene { width: 100%; height: auto; display: block; margin-top: 4px; }
 
-  /* —— 留言：手写字体 + 便签纸 + 和纸胶带 —— */
-  .msg-wrap {
-    position: relative;
-    margin: 18px 0 6px;
-    transform: rotate(-2.2deg);
-  }
-  .tape {
-    position: absolute;
-    top: -16px; left: 50%;
-    width: 150px; height: 34px;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgba(143,227,196,.55);
-    border: 1px dashed rgba(74,59,42,.35);
-    border-radius: 2px;
-  }
-  .msg {
-    font-family: var(--hand);
-    font-size: 54px;
-    line-height: 1.62;
-    letter-spacing: 3px;
-    color: #3A2E22;
-    max-width: 760px;
-    padding: 30px 40px 34px;
-    background:
-      linear-gradient(180deg, #FFFDF6 0%, #FFF6E4 100%);
-    border: 2px solid rgba(74,59,42,.35);
-    border-radius: 10px;
-    box-shadow: 6px 9px 0 rgba(74,59,42,.12);
-  }
-  .msg-underline {
-    display: block;
-    margin: 10px auto 0;
-    width: 280px; height: 18px;
-  }
-
-  .items {
-    width: 720px;
-    margin-top: 26px;
+  .ribbon {
+    display: inline-block;
+    margin-top: 6px;
+    background: var(--red);
+    color: #FFF6E8;
     font-family: var(--han);
+    font-size: 31px;
+    letter-spacing: 3px;
+    padding: 14px 40px;
+    border-radius: 999px;
+    box-shadow: 0 6px 14px rgba(210, 60, 40, .30);
   }
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 34px;
-    line-height: 1.95;
-    color: #3A2E22;
+
+  /* —— 拍立得下半：To / 留言 / 署名 —— */
+  .to {
+    margin-top: 26px;
+    font-size: 42px;
+    color: #3A2B20;
+    letter-spacing: 3px;
+  }
+  .to .to-en {
+    font-family: var(--latin);
+    font-weight: 700;
+    font-size: 50px;
+    color: #3A2B20;
+    margin-right: 10px;
+  }
+
+  .quote {
+    font-family: var(--hand);
+    font-size: 50px;
+    line-height: 1.55;
+    color: #D8402C;
+    letter-spacing: 2px;
+    max-width: 720px;
+    margin: 14px auto 0;
+  }
+
+  .attrib {
+    font-family: var(--hand);
+    font-size: 32px;
+    color: var(--brown);
+    margin-top: 14px;
     letter-spacing: 2px;
   }
-  .item::before {
-    content: "✶";
-    color: var(--red);
-    font-family: var(--hand);
-    font-size: 30px;
-    margin-right: 14px;
-  }
-  .item span:first-child { flex: 1; text-align: left; }
-  .item span:last-child { color: var(--ikb); }
 
   .meta {
-    margin-top: auto;
-    text-align: center;
-    font-family: var(--han);
-    font-size: 28px;
-    color: var(--ink-soft);
+    margin-top: 16px;
+    font-size: 25px;
+    color: #8A6A4F;
     letter-spacing: 2px;
   }
-  .meta .tail { margin-top: 10px; color: var(--red); }
+  .meta .tail { margin-top: 8px; color: var(--red); }
 
-  /* —— ASCII 数字媒体署名条 —— */
-  .ascii {
-    margin-top: 22px;
-    font-family: "Courier New", monospace;
-    font-size: 15px;
-    line-height: 1.25;
-    color: rgba(74,59,42,.7);
-    white-space: pre;
-    letter-spacing: 0;
+  /* —— 底部已点餐食条 —— */
+  .strip {
+    margin-top: 26px;
+    width: 100%;
+    background: #F5E7CE;
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(190, 140, 80, .25);
+    padding: 18px 26px;
+    font-size: 27px;
+    color: #4A3222;
+    letter-spacing: 1px;
+    line-height: 1.85;
+    text-align: center;
+  }
+  .strip-label { font-family: var(--han); }
+  .item { display: inline; }
+  .item span + span { margin-left: 4px; }
+  .item + .item::before {
+    content: "丨";
+    color: #C9A97E;
+    margin: 0 12px;
   }
 
   .brand {
     position: absolute;
-    right: 64px; bottom: 78px;
+    right: 62px; bottom: 74px;
     font-family: var(--latin);
-    font-size: 30px;
-    color: rgba(0,0,0,.4);
+    font-weight: 700;
+    font-size: 32px;
+    color: rgba(74, 43, 26, .42);
     letter-spacing: 1px;
   }
 
   .disclaimer {
     position: absolute;
-    left: 0; right: 0; bottom: 42px;
+    left: 0; right: 0; bottom: 40px;
     text-align: center;
-    font-family: var(--han);
     font-size: 22px;
-    color: rgba(0,0,0,.34);
+    color: rgba(74, 43, 26, .38);
     letter-spacing: 1px;
   }
 
-  /* —— 预览印章 —— */
   .badge {
     position: absolute;
-    top: 56px; right: 60px;
+    top: 54px; right: 58px;
     font-family: var(--han);
     font-size: 30px;
     color: var(--red);
@@ -242,128 +205,86 @@
     letter-spacing: 6px;
     text-indent: 6px;
     transform: rotate(8deg);
-    background: rgba(255,247,236,.35);
-    box-shadow: 0 0 0 2px rgba(218,41,28,.15);
+    background: rgba(255, 253, 248, .55);
+    box-shadow: 0 0 0 2px rgba(226, 59, 46, .15);
   }
 </style>
 </head>
 <body>
   <div class="card">
-    <!-- RISO 错位套印色块 -->
-    <svg class="riso" viewBox="0 0 1080 1440" preserveAspectRatio="none">
-      <g opacity="0.5">
-        <ellipse cx="235" cy="250" rx="370" ry="320" fill="#E8743B"/>
-        <ellipse cx="245" cy="262" rx="370" ry="320" fill="#FF8A8A" opacity="0.6"/>
-      </g>
-      <g opacity="0.48">
-        <ellipse cx="905" cy="1190" rx="400" ry="340" fill="#FFC72C"/>
-        <ellipse cx="896" cy="1180" rx="400" ry="340" fill="#FFB27A" opacity="0.6"/>
-      </g>
-      <g opacity="0.42">
-        <ellipse cx="950" cy="215" rx="270" ry="230" fill="#FF8A8A"/>
-        <ellipse cx="942" cy="207" rx="270" ry="230" fill="#F0A868" opacity="0.6"/>
-      </g>
-      <g opacity="0.4">
-        <ellipse cx="170" cy="1250" rx="310" ry="250" fill="#FFB27A"/>
-        <ellipse cx="178" cy="1242" rx="310" ry="250" fill="#FFC72C" opacity="0.5"/>
-      </g>
-      <g opacity="0.3">
-        <ellipse cx="540" cy="760" rx="300" ry="260" fill="#FF9E5E"/>
-      </g>
-    </svg>
-
-    <div class="halftone"></div>
     <div class="grain"></div>
-
-    <!-- 手绘卡通烘焙涂鸦 -->
-    <svg class="doodles" viewBox="0 0 1080 1440">
-      <!-- 汉堡小人 -->
-      <g transform="translate(820,250) rotate(-6)" stroke-linejoin="round">
-        <path d="M-72 -8 Q0 -82 72 -8 Q40 -20 0 -20 Q-40 -20 -72 -8 Z" fill="#FFC72C" stroke="#4A3B2A" stroke-width="4"/>
-        <g fill="#FFF3D6" stroke="#4A3B2A" stroke-width="1.5">
-          <ellipse cx="-30" cy="-36" rx="5.5" ry="2.6" transform="rotate(-20 -30 -36)"/>
-          <ellipse cx="8" cy="-48" rx="5.5" ry="2.6" transform="rotate(15 8 -48)"/>
-          <ellipse cx="40" cy="-34" rx="5.5" ry="2.6" transform="rotate(30 40 -34)"/>
-        </g>
-        <path d="M-74 -2 q13 -17 26 0 q13 -17 26 0 q13 -17 26 0 q13 -17 26 0 l0 12 q-78 20 -156 0 Z" fill="#7FC97F" stroke="#4A3B2A" stroke-width="3"/>
-        <rect x="-68" y="6" width="136" height="30" rx="14" fill="#7A4A2B" stroke="#4A3B2A" stroke-width="4"/>
-        <path d="M-70 38 Q0 80 70 38 L58 70 Q0 92 -58 70 Z" fill="#E8A33D" stroke="#4A3B2A" stroke-width="4"/>
-        <circle cx="-20" cy="-44" r="5" fill="#4A3B2A"/>
-        <circle cx="20" cy="-44" r="5" fill="#4A3B2A"/>
-        <path d="M-16 -28 Q0 -14 16 -28" fill="none" stroke="#4A3B2A" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="-38" cy="-32" r="7" fill="#FF8A8A" opacity=".55"/>
-        <circle cx="38" cy="-32" r="7" fill="#FF8A8A" opacity=".55"/>
-      </g>
-
-      <!-- 薯条盒 -->
-      <g transform="translate(150,1118) rotate(7)" stroke-linejoin="round">
-        <g stroke="#4A3B2A" stroke-width="3">
-          <rect x="-28" y="-70" width="13" height="64" rx="5" fill="#FFC72C" transform="rotate(-9 -21 -38)"/>
-          <rect x="-7" y="-80" width="13" height="74" rx="5" fill="#FFD24D"/>
-          <rect x="15" y="-68" width="13" height="62" rx="5" fill="#FFC72C" transform="rotate(11 21 -37)"/>
-        </g>
-        <path d="M-48 42 L-35 -32 L35 -32 L48 42 Z" fill="#DA291C" stroke="#4A3B2A" stroke-width="4"/>
-        <path d="M-48 42 L48 42 L48 52 L-48 52 Z" fill="#B71F14"/>
-        <circle cx="0" cy="-50" r="3" fill="#4A3B2A"/>
-        <path d="M-6 -44 Q0 -38 6 -44" fill="none" stroke="#4A3B2A" stroke-width="2.5" stroke-linecap="round"/>
-      </g>
-
-      <!-- 饮料杯 -->
-      <g transform="translate(905,1062) rotate(-5)" stroke-linejoin="round">
-        <path d="M-42 -8 L42 -8 L31 112 Q0 124 -31 112 Z" fill="#EAF4FF" stroke="#4A3B2A" stroke-width="4"/>
-        <path d="M-46 -8 Q0 0 46 -8 L41 8 Q0 16 -41 8 Z" fill="#FFC72C" stroke="#4A3B2A" stroke-width="3"/>
-        <ellipse cx="0" cy="-10" rx="42" ry="9" fill="#FFE08A" stroke="#4A3B2A" stroke-width="3"/>
-        <rect x="7" y="-88" width="11" height="86" rx="5" fill="#DA291C" stroke="#4A3B2A" stroke-width="3" transform="rotate(12 12 -45)"/>
-      </g>
-
-      <!-- 星星 / 火花 -->
-      <g fill="#FFC72C" stroke="#4A3B2A" stroke-width="2">
-        <path transform="translate(300,250) scale(1.1)" d="M0 -18 Q4 -4 18 0 Q4 4 0 18 Q-4 4 -18 0 Q-4 -4 0 -18 Z"/>
-        <path transform="translate(700,560) scale(0.8)" d="M0 -18 Q4 -4 18 0 Q4 4 0 18 Q-4 4 -18 0 Q-4 -4 0 -18 Z"/>
-        <path transform="translate(180,640) scale(0.7)" d="M0 -18 Q4 -4 18 0 Q4 4 0 18 Q-4 4 -18 0 Q-4 -4 0 -18 Z"/>
-      </g>
-      <!-- 爱心 -->
-      <path transform="translate(640,300)" d="M0 6 C -14 -8 -32 2 -14 17 L0 31 L14 17 C32 2 14 -8 0 6 Z" fill="#FF6B6B" stroke="#4A3B2A" stroke-width="3"/>
-      <path transform="translate(360,1010) scale(0.8)" d="M0 6 C -14 -8 -32 2 -14 17 L0 31 L14 17 C32 2 14 -8 0 6 Z" fill="#FF6B6B" stroke="#4A3B2A" stroke-width="3"/>
-    </svg>
-
-    <div class="frame"></div>
     $badge_html
 
-    <div class="content">
-      <div class="tag">麦 麦 请 客 卡</div>
-      <div class="tag-en">McTreat · a little treat for you</div>
-      <svg class="squiggle" width="300" height="20" viewBox="0 0 300 20">
-        <path d="M4 12 q20 -12 40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#DA291C" stroke-width="4" stroke-linecap="round"/>
-      </svg>
+    <div class="page">
+      <div class="title">麦麦请客卡</div>
 
-      <div class="name">$recipient</div>
-      <div class="sub">$subtitle</div>
+      <div class="polaroid">
+        <div class="photo">
+          <div class="mcd-treat">McD Treat</div>
+          <div class="flourish">— Order placed! &nbsp;/&nbsp; It's my treat! —</div>
 
-      <svg class="divider" viewBox="0 0 240 26">
-        <path d="M6 16 q30 -16 58 0 t58 0 t58 0" fill="none" stroke="#4A3B2A" stroke-width="3" stroke-linecap="round" opacity=".7"/>
-        <circle cx="120" cy="13" r="5" fill="#FFC72C" stroke="#4A3B2A" stroke-width="2"/>
-      </svg>
+          <!-- 卡哇伊汉堡 + 薯条 -->
+          <svg class="scene" viewBox="0 0 700 400">
+            <!-- 涂鸦：波浪线 / 圆点 / 星星 / 爱心 -->
+            <g fill="none" stroke="#E8956B" stroke-width="5" stroke-linecap="round">
+              <path d="M36 158 q14 -18 28 0 q14 18 28 0"/>
+              <path d="M612 118 q12 -16 24 0 q12 16 24 0"/>
+              <path d="M648 316 q18 14 0 28 q-18 14 0 28"/>
+              <path d="M46 306 q-16 14 0 28 q16 14 0 28"/>
+            </g>
+            <circle cx="66" cy="236" r="12" fill="none" stroke="#E23B2E" stroke-width="5"/>
+            <circle cx="652" cy="182" r="9" fill="#F08A3C"/>
+            <path transform="translate(98,96) scale(1.15)" d="M0 -30 L8.8 -9.3 30 -9.3 12.6 3.5 18.5 24.3 0 12 -18.5 24.3 -12.6 3.5 -30 -9.3 -8.8 -9.3 Z" fill="#F08A3C"/>
+            <path transform="translate(598,252) scale(0.62)" d="M0 -30 L8.8 -9.3 30 -9.3 12.6 3.5 18.5 24.3 0 12 -18.5 24.3 -12.6 3.5 -30 -9.3 -8.8 -9.3 Z" fill="#F6C453"/>
+            <path transform="translate(636,64) scale(1.25)" d="M0 8 C -8 -6 -30 0 -16 16 L0 30 L16 16 C30 0 8 -6 0 8 Z" fill="#E23B2E"/>
+            <path transform="translate(120,344) scale(0.7)" d="M0 8 C -8 -6 -30 0 -16 16 L0 30 L16 16 C30 0 8 -6 0 8 Z" fill="#F08A3C"/>
 
-      <div class="msg-wrap">
-        <div class="tape"></div>
-        <div class="msg">$message
-          <svg class="msg-underline" viewBox="0 0 280 18">
-            <path d="M6 11 q26 -9 52 0 t52 0 t52 0 t52 0 t52 0" fill="none" stroke="#E8743B" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- 汉堡小人 -->
+            <g transform="translate(255,230) scale(1.06)">
+              <path d="M-122 62 Q0 98 122 62 L112 88 Q0 112 -112 88 Z" fill="#EFB054"/>
+              <rect x="-118" y="28" width="236" height="36" rx="18" fill="#7A4A2B"/>
+              <path d="M-126 24 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 q16 -22 32 0 l0 14 q-126 26 -252 0 Z" fill="#7CB85C"/>
+              <path d="M-128 12 C -70 -96 70 -96 128 12 Q64 30 0 30 Q-64 30 -128 12 Z" fill="#F6C453"/>
+              <g fill="#FBF0D0">
+                <ellipse cx="-54" cy="-22" rx="8" ry="4" transform="rotate(-18 -54 -22)"/>
+                <ellipse cx="-12" cy="-40" rx="8" ry="4" transform="rotate(8 -12 -40)"/>
+                <ellipse cx="32" cy="-36" rx="8" ry="4" transform="rotate(22 32 -36)"/>
+                <ellipse cx="68" cy="-14" rx="8" ry="4" transform="rotate(35 68 -14)"/>
+              </g>
+              <circle cx="-34" cy="-12" r="7.5" fill="#4A3222"/>
+              <circle cx="34" cy="-12" r="7.5" fill="#4A3222"/>
+              <path d="M-17 2 Q0 20 17 2" fill="none" stroke="#4A3222" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="-60" cy="0" r="12" fill="#F49E9E" opacity=".8"/>
+              <circle cx="60" cy="0" r="12" fill="#F49E9E" opacity=".8"/>
+            </g>
+
+            <!-- 薯条（M 盒） -->
+            <g transform="translate(492,222)">
+              <g>
+                <rect x="-70" y="-120" width="30" height="130" rx="14" fill="#F2B93B" transform="rotate(-8 -55 -55)"/>
+                <rect x="-30" y="-138" width="30" height="148" rx="14" fill="#F7C948"/>
+                <rect x="10" y="-130" width="30" height="140" rx="14" fill="#FFD966" transform="rotate(6 25 -60)"/>
+                <rect x="48" y="-112" width="30" height="122" rx="14" fill="#F2B93B" transform="rotate(12 63 -51)"/>
+              </g>
+              <path d="M-92 -20 L92 -20 L74 128 Q0 150 -74 128 Z" fill="#D63324"/>
+              <path d="M-92 10 L92 10 L76 132 Q0 154 -76 132 Z" fill="#E23B2E"/>
+              <path d="M-42 106 L-42 34 L0 84 L42 34 L42 106" fill="none" stroke="#FFF6E8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
           </svg>
+
+          <div class="ribbon">$subtitle</div>
+        </div>
+
+        <div class="to"><span class="to-en">To:</span>$recipient</div>
+        <div class="quote">“$message”</div>
+        <div class="attrib">—— $brand</div>
+        <div class="meta">
+          <div>$timestamp</div>
+          $eta_html
         </div>
       </div>
 
-      <div class="items">$items_html</div>
-
-      <div class="meta">
-        <div>$timestamp</div>
-        $eta_html
-      </div>
-
-      <div class="ascii">  ╭──────────────────────────────╮
-  │   ( •̀ ω •́ )✧  请 客 快 乐  ✧   │
-  ╰──────────────────────────────╯</div>
+      <div class="strip"><span class="strip-label">已点餐食：</span>$items_html</div>
     </div>
 
     <div class="brand">$brand</div>
