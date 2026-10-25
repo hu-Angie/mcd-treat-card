@@ -80,6 +80,11 @@ def render_card(
         try:
             page = browser.new_page(viewport={"width": 1080, "height": 1440})
             page.set_content(page_html, wait_until="load")
+            # 等网络字体（手写体 / 标题体）加载完成，避免截图时回退到系统字体
+            try:
+                page.wait_for_timeout(2200)
+            except Exception:
+                pass
             page.screenshot(path=str(out_path))
         finally:
             browser.close()
